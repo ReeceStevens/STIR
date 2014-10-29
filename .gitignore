@@ -1,0 +1,6 @@
+# Ignore any generated tables or images
+*.png
+*.jpg
+*.tif
+*.csv
+*.pyc
