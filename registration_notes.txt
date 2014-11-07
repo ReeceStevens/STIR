@@ -1,0 +1,121 @@
+Notes on Image Registration using FSL
+=====================================
+
+Reference: fsl.fmrib.ox.ac.uk/fslcourse/lectures/reg.pdf
+
+3 Spatial Transformations
+	1. Rigid-Body Transformations
+		6 Degrees of Freedom in 3D
+		(3 rotations, 3 translations)
+		Used for within-subject registrations
+
+	2. Affine Transformations
+		12 Degrees of Freedom in 3D
+		Linear transformation
+		3 rotations, 3 translations, 3 scalings, 3 skews/shears
+		Used for eddy current correction and initiaizing non-linear registration
+
+	3. Non-Linear Transformations
+		> 12 Degrees of Freedom
+		Subject to constraints:
+			basis functions (B-Splines)
+			regularization
+			topology-preservation
+		Used for between-subject registrations
+
+What do these transformations look like?
+	Deformation field-- can be represented as a matrix of transformation vectors
+	
+	Warp resolution-- controlled by the spacing of control points in the image (avg. is 10mm)
+		
+Cost Function
+	Measures the "goodness" of alignment, seeking minimum value
+	Opposite of the cost function is the similarity function
+
+
+	Linear Transformations
+	
+		Cost functions 			| 				Requirements
+		------------------------|---------------------------------------------------
+		Least Squares  			| Same modality (exact sequence parameters)
+		Normalized Correlation 	| Same modality (can change brightness and contrast)
+		Correlation Ratio		| Any MR modality
+		Mutual Information		| Any modality (including CT, PET, etc.)
+		Normalized Mutual Info.	| Any modality
+		BBR 					| Within-subject EPI to structural
+	
+	Non-linear Transformations
+		ONLY can use Least Squares as a cost function
+			=> IMAGES MUST BE THE SAME MODALITY AND/OR SEQUENCE	
+	
+Interpolation Methods
+	Nearest Neighbor
+		Takes value of the nearest control point
+		fast, but blocky
+	Trilinear
+		Considers the four surrounding control points
+		fast with some blurring-- most common option
+	Spline, Sinc, k-Space methods
+		Creates sharp images but can create values outside the original range
+
+
+
+Applying Transformations
+	1. Estimating a transformation
+		finding the transformation
+		no resampling
+	2. Resampling
+		*applying* a transformation
+		creates a new, modified image
+
+	Registration = delay resampling = reduced image quality = coregistration = spatial normalization
+	
+	Transforming Masks
+		Mask data is usually 0 and 1, interpolation will give in-between values
+		Make sure the output data type is a float (apply warp and FLIRT default)
+		re-threshold (binarize) the transformed mask
+			thresholds around 0.5 => keep same size
+
+===================
+===================
+
+Practical Application
+	Two tools: FNIRT and FLIRT (Non-linear and Linear)
+	Recommended preliminary steps:
+		Reorientation (fslreorient2std)
+		Brain Extraction (BET)
+		Bias-field correction (FAST- see later)
+		
+	Case:
+		Two more more different types of images from the same subject
+		Align images so that they can be used for multi-modal segmentation
+			Solution: FLIRT with 6 DOF (rigid-body)
+		Registering T_2 and T_1:
+			multi-modal cost function (default of correlation ratio)
+		Run brain extraction on *both images*
+		Choose the higher resolution/contrast image as reference
+			always check output! FSLView or slices
+			
+		Registration
+			The reference image controls the field of view and resolution of the output image
+			Transformations are given FROM input space TO reference space
+			Inverse transformations to go in reverse can be easily calculated as well
+			Samples must be in the sampe space (structural and/or functional) and at the same resolution
+				Can resample images into a different space by applying a previously derived transformation
+			
+			Troubleshooting:
+				- Check voxel size is correct for both images
+				- Check if brain extraction went okay
+				- Limit search
+				- Try different cost functions
+				- Check for artifacgs and pathologies
+
+	Case 2: Functional and T_1 Weighted
+		Must register the images to a common space to allow the group study to be performed
+			Solution: 2-stage registration with FLIRT and FNIRT (in FEAT program)
+		Two-Stage Registration
+			To register an EPI to standard space template such as MNII52, use a structural intermediate image
+				This is automatically done by FEAT GUI (some user control)
+				Must manually run brain extraction (not usually on the EPI, however)
+			* See picture of GUI interface *
+			
