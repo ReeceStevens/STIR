@@ -7,6 +7,7 @@ from subprocess import CalledProcessError
 
 
 data_table = 'database.csv'; 
+dicom_fields = {'SeriesDescription':[0x0008,0x103E] , 'Rows':[0x0028,0x0010] , 'Columns':[0x0028,0x0011] , 'ImageGeometryType':[
 
 def fileCount(path):
         
@@ -25,7 +26,7 @@ def fileCount(path):
 
     return len(all_files);
 
-def dirFileRead(path):
+def dirFileRead(path, parameters):
     dir_contents = os.listdir(path);
     dicom_files = [];
     mnc_files = [];
@@ -36,13 +37,26 @@ def dirFileRead(path):
     for k in all_files:
         if (k == ".DS_Store"):
             all_files.remove(k);
-        p = re.compile("csf", re.IGNORECASE);
+       # p = re.compile("csf", re.IGNORECASE);
        # if (p.match(k) != None):
        #     all_files.remove(k);
 
         if (magic.from_file(path + "/" + k) == 'DICOM medical imaging data'):
            dicom_files.append(path + "/" + k);
            dm = dicom.read_file(dicom_files[0]);
+
+          #############################################
+
+          for x in parameters:
+              try:
+                  param_info = "dm." + x;
+              except AttributeError, e:
+                  continue;
+              if param_info not in attributes:
+
+          #############################################
+
+           # Extract the Series Description
            try:
                 series_info = dm.SeriesDescription;
            except AttributeError, e:
@@ -52,6 +66,8 @@ def dirFileRead(path):
                for x in dm.SeriesDescription:
                     description += x;
                attributes.append(description);
+
+
         elif (magic.from_file(path + "/" + k) == 'NetCDF Data Format data'):
             mnc_files.append(path + "/" + k);
             try:
@@ -72,7 +88,11 @@ def dirFileRead(path):
 def main():
     # Load all files in current directory
     # Need to extend this for intelligently navigating the database directory
-    
+    parameters = input("For DICOM files, what parameters would you like to put in the database?\nOptions are: SeriesDescription, Rows, Columns, ImageGeometryType ([a] for all) ");
+    if (parameters == "a"):
+        parameters = ["SeriesDescription", "Rows", "Columns", "ImageGeometryType"];
+    else:
+        parameters = list(parameters);
     root_dir = raw_input("Enter root directory of database: ");
     working_dir = root_dir;
     root_dir_split = root_dir.split("/");
@@ -81,7 +101,7 @@ def main():
     with open(data_table, "a") as myfile:
         for d in directories:
             num_files = fileCount(d);
-            file_attributes = dirFileRead(d);
+            file_attributes = dirFileRead(d, parameters);
             if (num_files != 0):
                 split_path = d.split("/");
                 for q in range (len(root_dir_split)):

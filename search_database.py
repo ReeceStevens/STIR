@@ -15,17 +15,30 @@ import sys
 import csv
 
 def search(argtype, search_term, path_to_database):
+    i = 0;
     if (argtype == 'id'):
         results = searchByID(search_term, path_to_database);
+        for each in results:
+            print each;
+            i += 1;
+        print("\nTotal number of results found: " + str(i));
         return results;
     elif (argtype == 'modality'):
         results = searchByModality(search_term, path_to_database);
+        for each in results:
+            print (each);
+            i += 1;
+        print("\nTotal number of results found: " + str(i));
         return results;
     elif ((argtype == 'list') & (search_term == 'modality')):
         results = listTypes(path_to_database);
+        for each in results:
+            print each;
+            i += 1;
+        print("\nTotal number of results found: " + str(i));
         return results;
     else:
-        print("These are not valid search options. Calling format is 'search_database.search(<options> <argument> <path_to_database>)', where options can be 'id', 'modality', or 'list'.");
+        print("These are not valid search options.\n Usage: search_database.py <id/modality/list> <search term> <path/to/database.csv>");
         #raise InvalidSearchArgs('Improper parameters were passed to the search function.');
         return -1;
 
@@ -44,7 +57,6 @@ def searchByID(argument, db_path):
 
 
 def searchByModality(argument, db_path):
-    print("Hooray, we're searching by modality!");
     matches = [];
     paths = [];
     with open(db_path, 'rb') as csvfile:
@@ -59,6 +71,7 @@ def searchByModality(argument, db_path):
         paths = getPath(matches);
         if (paths == -1):
             print("No matches for the query were found.");
+            return;
     return paths;
 
 def listTypes(db_path):
@@ -80,7 +93,7 @@ def listTypes(db_path):
 def getPath(matches):
     paths = [];
     if (len(matches) == 0):
-        print("No matches found. Sorry!");
+        print("No matches for the query were found.");
     else:
         for results in matches:
             temp_path = '';
@@ -97,4 +110,8 @@ def getPath(matches):
 
 if __name__ == '__main__':
     # If this script is called, run main
-    search(sys.argv[1], sys.argv[2], sys.argv[3]);
+    try: 
+        search(sys.argv[1], sys.argv[2], sys.argv[3]);
+    except IndexError: 
+        print("Not enough arguments.\nUsage: search_database.py <id/modality/list> <search term> <path/to/database.csv>");
+        

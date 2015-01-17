@@ -4,6 +4,7 @@
 *.tif
 *.csv
 *.pyc
+*.txt
 
 # For now, ignore Matlab files
 *.m
