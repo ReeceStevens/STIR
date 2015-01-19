@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ $# -gt 3 ]; then
+    echo $#
+    echo "Invalid number of arguments."
+    echo "Usage: searchdb <id/modality/list> <search term> </path/to/database.csv>"
+else
+    DEFAULT_PYTHON=`python --version`
+    if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
+        python2 search_database.py $@
+    else
+        python search_database.py $@
+    fi
+fi

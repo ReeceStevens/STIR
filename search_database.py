@@ -38,7 +38,7 @@ def search(argtype, search_term, path_to_database):
         print("\nTotal number of results found: " + str(i));
         return results;
     else:
-        print("These are not valid search options.\n Usage: search_database.py <id/modality/list> <search term> <path/to/database.csv>");
+        print("These are not valid options.\n Usage: searchdb <id/modality/list> <search term> <path/to/database.csv>");
         #raise InvalidSearchArgs('Improper parameters were passed to the search function.');
         return -1;
 
@@ -113,5 +113,5 @@ if __name__ == '__main__':
     try: 
         search(sys.argv[1], sys.argv[2], sys.argv[3]);
     except IndexError: 
-        print("Not enough arguments.\nUsage: search_database.py <id/modality/list> <search term> <path/to/database.csv>");
+        print("Not enough arguments.\nUsage: searchdb <id/modality/list> <search term> <path/to/database.csv>");
         

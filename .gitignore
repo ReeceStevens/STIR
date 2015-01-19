@@ -5,6 +5,7 @@
 *.csv
 *.pyc
 *.txt
-
+*.swp
+.*
 # For now, ignore Matlab files
 *.m
