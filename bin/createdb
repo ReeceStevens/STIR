@@ -2,7 +2,7 @@
 
 DEFAULT_PYTHON=`python --version`
 if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
-    python2 create_database.py $@
+    python2 ../pyscripts/create_database.py $@
 else
-    python create_database.py $@
+    python ../pyscripts/create_database.py $@
 fi

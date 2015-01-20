@@ -7,8 +7,8 @@ if [ $# -gt 3 ]; then
 else
     DEFAULT_PYTHON=`python --version`
     if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
-        python2 search_database.py $@
+        python2 ../pyscripts/search_database.py $@
     else
-        python search_database.py $@
+        python ../pyscripts/search_database.py $@
     fi
 fi
