@@ -50,9 +50,11 @@ def dirFileRead(path, parameters):
           for x in parameters:
               try:
                   param_info = "dm." + x;
+                  output = eval(param_info);
               except AttributeError, e:
                   continue;
               if param_info not in attributes:
+                  attributes.append(output);
 
           #############################################
 
