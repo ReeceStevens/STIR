@@ -15,8 +15,8 @@ def viewDicom(dcmfile):
         raise TypeError("Can't determine how to display this image!");
 
     im = Image.frombuffer(mode, size, dcmfile.PixelData, "raw", mode, 0, 1);
-    #im.show();
-    im.convert('L').save('/home/reece/STIR/test_image.png');
+    im.show();
+    im.convert('L').save('../test_image.png');
 
 if __name__ == "__main__":
     viewDicom(sys.argv[1]);
