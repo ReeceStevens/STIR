@@ -45,30 +45,14 @@ def dirFileRead(path, parameters):
            dicom_files.append(path + "/" + k);
            dm = dicom.read_file(dicom_files[0]);
 
-          #############################################
-
-          for x in parameters:
+           for x in parameters:
               try:
                   param_info = "dm." + x;
                   output = eval(param_info);
               except AttributeError, e:
                   continue;
-              if param_info not in attributes:
-                  attributes.append(output);
-
-          #############################################
-
-           # Extract the Series Description
-           try:
-                series_info = dm.SeriesDescription;
-           except AttributeError, e:
-                continue;
-           if dm.SeriesDescription not in attributes:
-               description = '';
-               for x in dm.SeriesDescription:
-                    description += x;
-               attributes.append(description);
-
+              if str(output) not in attributes:
+                  attributes.append(str(output));
 
         elif (magic.from_file(path + "/" + k) == 'NetCDF Data Format data'):
             mnc_files.append(path + "/" + k);
@@ -90,7 +74,7 @@ def dirFileRead(path, parameters):
 def main():
     # Load all files in current directory
     # Need to extend this for intelligently navigating the database directory
-    parameters = input("For DICOM files, what parameters would you like to put in the database?\nOptions are: SeriesDescription, Rows, Columns, ImageGeometryType ([a] for all) ");
+    parameters = raw_input("For DICOM files, what parameters would you like to put in the database? Options are: SeriesDescription, Rows, Columns, ImageGeometryType ([a] for all) ");
     if (parameters == "a"):
         parameters = ["SeriesDescription", "Rows", "Columns", "ImageGeometryType"];
     else:
