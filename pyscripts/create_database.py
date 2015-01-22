@@ -7,7 +7,7 @@ from subprocess import CalledProcessError
 
 
 data_table = 'database.csv'; 
-dicom_fields = {'SeriesDescription':[0x0008,0x103E] , 'Rows':[0x0028,0x0010] , 'Columns':[0x0028,0x0011]}
+dicom_fields = {'SeriesDescription':[0x0008,0x103E] , 'Rows':[0x0028,0x0010] , 'Columns':[0x0028,0x0011], 'ImageGeometryType':[0x0020,0x0070]}
 
 def fileCount(path):
         
