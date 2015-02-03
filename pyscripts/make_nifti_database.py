@@ -1,11 +1,14 @@
 import dicom
+import sys
 import os
 import magic
 import subprocess
 
-def main():
-    root_db_dir = raw_input("Enter root directory of current database: ");
-    output_db_dir = raw_input("Enter root directory of new database: ");
+def main(root_db_dir, output_db_dir):
+    #root_db_dir = raw_input("Enter root directory of current database: ");
+    #output_db_dir = raw_input("Enter root directory of new database: ");
+    #root_db_dir = str(root_db_dir);
+    #output_db_dir = str(output_db_dir);
     try:
         os.makedirs(output_db_dir);
     except OSError:
@@ -53,5 +56,8 @@ def main():
                 subprocess.call(['mnc2nii', (root_db_dir + "/" + prefix + k), (output_db_dir + "/" + prefix + split_name[0] + ".nii")]); 
                 print(split_name[0] + "has been converted to NIFTI format.\n");
     
-
-main()
+if __name__ == '__main__':
+    try:
+        main(sys.argv[1], sys.argv[2]);
+    except IndexError:
+        print("Not enough arguments.\nUsage: db2nii <source_dir> <output_dir>\n");
