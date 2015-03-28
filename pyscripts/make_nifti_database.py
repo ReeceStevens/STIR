@@ -45,8 +45,8 @@ def main(root_db_dir, output_db_dir):
                 ############################################
                 # Convert from dicom to nifti using dcm2nii#
                 ############################################
-                subprocess.call(['dcm2nii', '-o', (output_db_dir + "/" + prefix), path]);
-                print("Dicom file successfully converted\n");
+                # subprocess.call(['dcm2nii', '-o', (output_db_dir + "/" + prefix), path]);
+                print("Dicom file passed over\n");
                 break;
             if (magic.from_file(path + "/" + k) == 'NetCDF Data Format data'): 
                 ###########################################
@@ -54,7 +54,7 @@ def main(root_db_dir, output_db_dir):
                 ###########################################
                 split_name = k.split(".");
                 print('mri_convert --in_type minc ' + root_db_dir + "/" + prefix + k + " " + output_db_dir + "/" + prefix + split_name[0] + ".nii.gz");
-                subprocess.call(['mri_convert --in_type minc ' + root_db_dir + "/" + prefix + k + " " + output_db_dir + "/" + prefix + split_name[0] + ".nii.gz"]); 
+                subprocess.call("mri_convert --in_type minc " + root_db_dir + "/" + prefix + k + " " + output_db_dir + "/" + prefix + split_name[0] + ".nii.gz"); 
                 print(split_name[0] + "has been converted to NIFTI format.\n");
     
 if __name__ == '__main__':
