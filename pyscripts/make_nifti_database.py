@@ -9,6 +9,8 @@ def main(root_db_dir, output_db_dir):
     #output_db_dir = raw_input("Enter root directory of new database: ");
     #root_db_dir = str(root_db_dir);
     #output_db_dir = str(output_db_dir);
+	# Open /dev/null for tossing stdout
+    devnull = open('/dev/null', 'w');
     try:
         os.makedirs(output_db_dir);
     except OSError:
@@ -45,16 +47,16 @@ def main(root_db_dir, output_db_dir):
                 ############################################
                 # Convert from dicom to nifti using dcm2nii#
                 ############################################
-                # subprocess.call(['dcm2nii', '-o', (output_db_dir + "/" + prefix), path]);
-                print("Dicom file passed over\n");
+                subprocess.call(['dcm2nii', '-o', (output_db_dir + "/" + prefix), path], stdout=devnull);
+                print("Dicom file " + k + " successfully converted\n");
                 break;
             if (magic.from_file(path + "/" + k) == 'NetCDF Data Format data'): 
                 ###########################################
                 # Convert from minc to nifti using mnc2nii#
                 ###########################################
                 split_name = k.split(".");
-                print('mri_convert --in_type minc ' + root_db_dir + "/" + prefix + k + " " + output_db_dir + "/" + prefix + split_name[0] + ".nii.gz");
-                subprocess.call("mri_convert --in_type minc " + root_db_dir + "/" + prefix + k + " " + output_db_dir + "/" + prefix + split_name[0] + ".nii.gz"); 
+                # print('mri_convert --in_type minc ' + root_db_dir + "/" + prefix + k + " " + output_db_dir + "/" + prefix + split_name[0] + ".nii.gz");
+                subprocess.call(["/corral-repl/utexas/poldracklab/software_lonestar/freesurfer/bin/mri_convert", "--in_type", "minc", (root_db_dir + "/" + prefix + k), (output_db_dir + "/" + prefix + split_name[0] + ".nii.gz")], stdout=devnull); 
                 print(split_name[0] + "has been converted to NIFTI format.\n");
     
 if __name__ == '__main__':

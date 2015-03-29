@@ -19,7 +19,10 @@ Python libraries used in these scripts include:
 
 Command line tools called as subprocess commands:
 - Minc Toolkit
-- mnc2nii
+- mri_convert
 - dcm2nii
 
-Ensure that the command line tools are located in your PATH variable.
+Due to some issues with subprocess not using the correct path, the
+absolute path to each command is specified in the python code. Replace
+this with the absolute path for your system (output of the command
+`which <command>`).
