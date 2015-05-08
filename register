@@ -1,9 +1,12 @@
 #!/bin/bash
 #$ -N stir_registration
 #$ -M reecestevens@utexas.edu
-#$ -m {e|a}
+#$ -m bea
 #$ -V
 #$ -o /work/03187/rstevens/registration_output.txt
-#$ -j
+#$ -j y
+#$ -l h_rt=3:30:00
+#$ -q normal
+#$ -pe 12way 12
 
 /home1/03187/rstevens/STIR/bin/db_reg /work/03187/rstevens/bet_output_db /work/03187/rstevens/reg_output
