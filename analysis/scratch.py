@@ -24,3 +24,18 @@ for image in newdata:
     i += 1;
 plt.show()
 
+# Simple Thresholding
+thresh_data = np.zeros([24,256,256])
+ret,thresh = cv2.threshold(data,200,255,cv2.THRESH_BINARY)
+for x in range(0, len(data)):
+    for y in range(0,len(data[0])):
+        for z in range(0,len(data[0,0])):
+            thresh_data[z,x,y] = thresh[x,y,z]
+i = 1;
+for image in thresh_data:
+    plt.subplot(4,6,i)
+    plt.imshow(image, 'gray')
+    plt.title('Slice ' + str(i))
+    plt.xticks([]), plt.yticks([])
+    i += 1;
+plt.show()
