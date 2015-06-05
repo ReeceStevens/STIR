@@ -29,20 +29,22 @@ plt.show() """
 
 # Adaptive Thresholding
 newdata_uint8 = np.divide(newdata, newdata.max())
-newdata_uint8 = np.multiply(newdata, 255)
+newdata_uint8 = np.multiply(newdata_uint8, 255)
 newdata_uint8 = np.array(newdata_uint8, dtype=np.uint8)
-plt.imshow(newdata_uint8[16], 'gray')
+""" plt.imshow(newdata_uint8[16], 'gray')
 plt.show()
 plt.imshow(newdata[16], 'gray')
-plt.show()
+plt.show() """
 i = 1
 max_thresh = newdata.max()
 for image in newdata_uint8:
-    # image = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 201, 0)
-    ret, image = cv2.threshold(image, 200,255,cv2.THRESH_BINARY)
+    #image = cv2.GaussianBlur(image, (5,5),0)
+    # image = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 5, 0)
+    # ret, image = cv2.threshold(image, 0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    #ret, image = cv2.threshold(image,115,255,cv2.THRESH_BINARY)
     orig_image = image;
-    contours, hierarchy = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    cv2.drawContours(orig_image, contours, -1, (0,255,0), 2)
+    contours, hierarchy = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(orig_image, contours, len(contours)-1, (0,255,0), 2)
     plt.subplot(4,6,i)
     plt.imshow(orig_image)
     plt.title('Slice ' + str(i))
