@@ -42,6 +42,8 @@ for image in newdata_uint8:
     # image = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 5, 0)
     # ret, image = cv2.threshold(image, 0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     #ret, image = cv2.threshold(image,115,255,cv2.THRESH_BINARY)
+
+    # Calculate average intensity for the image slice
     k = 0
     average = 0
     for x in image:

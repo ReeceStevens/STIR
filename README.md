@@ -5,8 +5,12 @@ Python scripts for creating, parsing, and viewing
 MRI databases consisting of both MINC and Dicom imaging
 formats.
 
-Now has the capability to convert databases of mixed MINC and 
-DICOM files into a single database of NIFTI formatted files.
+This combination of scripts is designed to create an organized
+database of scans that can be analyzed, registered, and segmented
+in an automated fashion.
+
+Currently in development: automatic image segmentation using
+OpenCV. 
 
 Dependencies
 ------------
@@ -15,7 +19,7 @@ Python libraries used in these scripts include:
 
 - PyDicom
 - Magic
-- Pillow (fork of Python Imaging Library)
+- OpenCV (cv2)
 
 Command line tools called as subprocess commands:
 - Minc Toolkit
