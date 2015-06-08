@@ -42,11 +42,30 @@ for image in newdata_uint8:
     # image = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 5, 0)
     # ret, image = cv2.threshold(image, 0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     #ret, image = cv2.threshold(image,115,255,cv2.THRESH_BINARY)
-    orig_image = image;
-    contours, hierarchy = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.drawContours(orig_image, contours, len(contours)-1, (0,255,0), 2)
+    k = 0
+    average = 0
+    for x in image:
+        for y in x:
+            # Ignore low intensity areas (background, CSF)
+            if (y <= 30):
+                continue
+            k = k + 1
+            average = average + y
+    if (k != 0):
+        average = average / k
+    else:
+        average = 0
+
+    # Threshold determined by values that are two standard deviations away from the adjusted mean
+    std_image = np.std(image)
+    print std_image
+    thresh = average + std_image*2
+    # orig_image = image
+    # contours, hierarchy = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # cv2.drawContours(orig_image, contours, len(contours)-1, (0,255,0), 2)
+    ret, image = cv2.threshold(image,thresh,255,cv2.THRESH_BINARY)
     plt.subplot(4,6,i)
-    plt.imshow(orig_image)
+    plt.imshow(image)
     plt.title('Slice ' + str(i))
     plt.xticks([]), plt.yticks([])
     i += 1;
