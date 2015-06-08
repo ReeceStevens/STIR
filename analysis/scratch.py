@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # Load scan from file
-img = nib.load('/Users/reecestevens/Downloads/output.nii')
+img = nib.load('/Users/reecestevens/Downloads/output.1.nii')
 data = img.get_data()
 # data = cv2.cvtColor(color_data, cv2.COLOR_BGR2GRAY)
 scan_res = data.shape[0]
@@ -25,7 +25,7 @@ for image in newdata:
     plt.title('Slice ' + str(i))
     plt.xticks([]), plt.yticks([])
     i += 1;
-plt.show() """
+plt.show() """ 
 
 # Adaptive Thresholding
 newdata_uint8 = np.divide(newdata, newdata.max())
@@ -58,14 +58,16 @@ for image in newdata_uint8:
 
     # Threshold determined by values that are two standard deviations away from the adjusted mean
     std_image = np.std(image)
-    print std_image
     thresh = average + std_image*2
-    # orig_image = image
+    orig_image = image
+
     # contours, hierarchy = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(orig_image, contours, len(contours)-1, (0,255,0), 2)
     ret, image = cv2.threshold(image,thresh,255,cv2.THRESH_BINARY)
+    # orig_image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2GRAY)
+    combined = cv2.addWeighted(orig_image, 0.5, image, 0.5, 0.0)
     plt.subplot(4,6,i)
-    plt.imshow(image)
+    plt.imshow(combined, 'gray')
     plt.title('Slice ' + str(i))
     plt.xticks([]), plt.yticks([])
     i += 1;
