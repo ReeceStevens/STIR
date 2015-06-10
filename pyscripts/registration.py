@@ -34,52 +34,77 @@ def main(root_db_dir, output_db_dir):
         # Select the directories that we know work right now.
         # This means the directories using the AX_* format.
         try:
-            if (re.match('AX_FLAIR_.*', split_path[-1])):
+            if (re.match('AX_3D_.*', split_path[-1])):
                 reference = split_path;     
             if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
                 reference = split_path;     
-            if (re.match('AX_DIFF_.*', split_path[-1])):
-                in_file = split_path;
-            if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
-                in_file = split_path;
         except IndexError:
+            # No known reference image found. Skipping path.
             continue;
-        # If the reference and input are from the same patient at the same date, we're ready to run FLIRT
-        if (reference[-2] == in_file[-2]) and (reference != ["", ""]) and (in_file != ["", ""]): 
-            prefix = "";
-            for folder in split_path:
-                try:
-                    os.makedirs(output_db_dir + "/" + prefix + folder);
-                    print("Creating directory " + output_db_dir + "/" + prefix + folder + "\n");
-                except OSError:
-                    if not os.path.isdir(output_db_dir + "/" + prefix + folder):
-                        print("Unable to create subdirectories.\n");
-                        return;
-                prefix += (folder + "/");
-            refpath = "/".join(reference);
-            refpath = root_db_dir + "/" + refpath;
-            inpath = "/".join(in_file);
-            inpath = root_db_dir + "/" + inpath;
-            dir_files_ref = [f for f in os.listdir(refpath) if os.path.isfile(os.path.join(refpath, f))];
-            for k in dir_files_ref:
-                if ((not(re.match(".*mask.*", k))) and (not(re.match("co.*", k))) and (not(re.match("o.*", k)))):
-                    refpath = "/".join([refpath, k]); 
-                    break;
+        scans = [];
+        try:
+            # AX-formatted scans
+            if (re.match('AX_DIFF_.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('AX_EPI_.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('AX_FLAIR_.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('AX_PERF.*', split_path[-1])):
+                scans.append(split_path);
+            # EPITHET-formatted scans
+            if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('EPITHET_STROKE_PROTOCOL_SC.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('EPITHET_STROKE_PROTOCOL_T1.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
+                scans.append(split_path);
+        except IndexError:
+            pass;
+        # If no diffusion scans were found, skip (nothing to register)
+        if (len(scans) < 1):
+            continue;
+        for in_file in scans: 
+            # If the reference and input are from the same patient at the same date, we're ready to run FLIRT
+            if (reference[-2] == in_file[-2]) and (reference != ["", ""]) and (in_file != ["", ""]): 
+                prefix = "";
+                for folder in split_path:
+                    try:
+                        os.makedirs(output_db_dir + "/" + prefix + folder);
+                        print("Creating directory " + output_db_dir + "/" + prefix + folder + "\n");
+                    except OSError:
+                        if not os.path.isdir(output_db_dir + "/" + prefix + folder):
+                            print("Unable to create subdirectories.\n");
+                            return;
+                    prefix += (folder + "/");
+                refpath = "/".join(reference);
+                refpath = root_db_dir + "/" + refpath;
+                inpath = "/".join(in_file);
+                inpath = root_db_dir + "/" + inpath;
+                dir_files_ref = [f for f in os.listdir(refpath) if os.path.isfile(os.path.join(refpath, f))];
+                for k in dir_files_ref:
+                    if ((not(re.match(".*mask.*", k))) and (not(re.match("co.*", k))) and (not(re.match("o.*", k)))):
+                        refpath = "/".join([refpath, k]); 
+                        break;
 
-            dir_files_in = [f for f in os.listdir(inpath) if os.path.isfile(os.path.join(inpath, f))];
-            for k in dir_files_in:
-                if ((not(re.match(".*mask.*", k))) and (not(re.match("co.*", k))) and (not(re.match("o.*", k)))):
-                    inpath = "/".join([inpath, k]); 
-                    break;
+                dir_files_in = [f for f in os.listdir(inpath) if os.path.isfile(os.path.join(inpath, f))];
+                for k in dir_files_in:
+                    if ((not(re.match(".*mask.*", k))) and (not(re.match("co.*", k))) and (not(re.match("o.*", k)))):
+                        inpath = "/".join([inpath, k]); 
+                        break;
 
-            ############################################################
-            # Register a diffusion image with the patient's structural #
-            ############################################################
-            # print(inpath + " is about to be registered to " + refpath + "...\n");
-            subprocess.call(["/work/03187/rstevens/fsl/fsl/bin/flirt", "-in", inpath, "-ref", refpath, "-out", (output_db_dir + "/" + prefix + "output.nii.gz")], stdout=devnull); 	
-            reference = ["", ""];
-            in_file = ["", ""]; 
-            print(inpath + " has been successfully registered to " + refpath + "\n");
+                ############################################################
+                # Register a diffusion image with the patient's structural #
+                ############################################################
+                # print(inpath + " is about to be registered to " + refpath + "...\n");
+                subprocess.call(["/work/03187/rstevens/fsl/fsl/bin/flirt", "-in", inpath, "-ref", refpath, "-out", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
+                reference = ["", ""];
+                in_file = ["", ""]; 
+                print(inpath + " has been successfully registered to " + refpath + "\n");
 
 if __name__ == '__main__':
     try:
