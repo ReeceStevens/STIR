@@ -36,7 +36,11 @@ def main(root_db_dir, output_db_dir):
         try:
             if (re.match('AX_FLAIR_.*', split_path[-1])):
                 reference = split_path;     
+            if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
+                reference = split_path;     
             if (re.match('AX_DIFF_.*', split_path[-1])):
+                in_file = split_path;
+            if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
                 in_file = split_path;
         except IndexError:
             continue;
