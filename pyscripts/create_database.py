@@ -94,14 +94,14 @@ def dirFileRead(path, parameters):
 
         
 
-def main():
+def main(root_dir):
     # Determine desired parameters and root directory
     parameters = raw_input("For DICOM files, what parameters would you like to put in the database? Options are: SeriesDescription, Rows, Columns, ImageGeometryType ([a] for all) ");
     if (parameters == "a"):
         parameters = ["SeriesDescription", "Rows", "Columns", "ImageGeometryType"];
     else:
         parameters = list(parameters);
-    root_dir = raw_input("Enter root directory of database: ");
+    root_dir = (str) root_dir;
     working_dir = root_dir;
     root_dir_split = root_dir.split("/");
 
@@ -128,5 +128,13 @@ def main():
                         myfile.write(", ");
                 myfile.write("\n");
 
-main()
+# Function handle to allow command line passing of arguments
+if __name__ == '__main__':
+    # If this script is called, run main
+    try: 
+        data_table = sys.argv[1];
+        main(sys.argv[2]);
+    except IndexError: 
+        print("Not enough arguments.\nUsage: searchdb <id/modality/list> <search term> <path/to/database.csv>");
+        
 

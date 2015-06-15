@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ $# -gt 2 ]; then
+    echo $#
+    echo "Invalid number of arguments."
+    echo "Usage: createdb <name_of_output.csv> </path/to/database>"
 DEFAULT_PYTHON=`python --version`
 if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
     python2 ../pyscripts/create_database.py $@
