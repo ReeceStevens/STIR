@@ -1,3 +1,13 @@
+###########################################################################
+#                       create_database.py                                #
+# Python script to recursively parse a database of scans, determine their #
+# file types, and produce a .csv file mapping the layout of the databse.  #
+#                                                                         # 
+# Author: Reece Stevens                                                   #
+# Written: October 2014                                                   #
+# Last Updated: 6/15/2015                                                 #
+###########################################################################
+
 import dicom
 import os
 import magic
@@ -5,10 +15,12 @@ import re
 from subprocess import check_output
 from subprocess import CalledProcessError
 
-
+# Output .csv file name
 data_table = 'database.csv'; 
-dicom_fields = {'SeriesDescription':[0x0008,0x103E] , 'Rows':[0x0028,0x0010] , 'Columns':[0x0028,0x0011], 'ImageGeometryType':[0x0020,0x0070]}
 
+###########################################################################
+# fileCount() - counts the number of relevant files in the database.      #
+###########################################################################
 def fileCount(path):
         
     dir_contents = os.listdir(path);
@@ -26,54 +38,64 @@ def fileCount(path):
 
     return len(all_files);
 
+####################################################################################
+# dirFileRead() - parses files in the given directory for metadata and returns it  #
+#                 in a list already formatted for the output csv. Supports metadata# 
+#                 from DICOM and MINC files                                        #
+####################################################################################
 def dirFileRead(path, parameters):
     dir_contents = os.listdir(path);
     dicom_files = [];
     mnc_files = [];
     attributes = [];
     all_files = [f for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))];
-   
-    # ignore the .DS_store file that appears in every directory
-    for k in all_files:
-        if (k == ".DS_Store"):
-            all_files.remove(k);
-       # p = re.compile("csf", re.IGNORECASE);
-       # if (p.match(k) != None):
-       #     all_files.remove(k);
+    
+    # If there are no files in the directory, return empty attributes list and exit.
+    if (len(all_files) == 0):
+        print("Passing through the directory: " + path);
+        return attributes;
 
+    # Otherwise, check each file
+    for k in all_files:
+        if (k == ".DS_Store"): # remove this hidden file
+            all_files.remove(k);
+            continue;
+        
+        # Detect DICOM files
         if (magic.from_file(path + "/" + k) == 'DICOM medical imaging data'):
            dicom_files.append(path + "/" + k);
-           dm = dicom.read_file(dicom_files[0]);
+           dm = dicom.read_file(dicom_files[0]); # extract file information
 
+           # Extract each desired parameter and insert it into the output list.
            for x in parameters:
               try:
                   param_info = "dm." + x;
-                  output = eval(param_info);
+                  output = eval(param_info); # extract a single parameter in dm
               except AttributeError, e:
                   continue;
-              if str(output) not in attributes:
+              if str(output) not in attributes: # prevent duplicate entries
                   attributes.append(str(output));
 
+        # Detect MINC files
         elif (magic.from_file(path + "/" + k) == 'NetCDF Data Format data'):
             mnc_files.append(path + "/" + k);
+            # extract file information
             try:
                 att = check_output(['mincinfo', '-attvalue', 'acquisition:scanning_sequence', (path + '/' + k)]);
                 att = att[0:(len(att)-1)];
+            # if information isn't available, skip the file and keep going
             except CalledProcessError, e:
                 all_files.remove(k);
                 print("MINC file lacking modality variable.");
                 continue;
-            if att not in attributes:
+            if att not in attributes: # prevent duplicates
                 attributes.append(att);
-
-    if (len(all_files) == 0):
-        print("Passing through the directory: " + path);
-        
     return attributes; 
 
+        
+
 def main():
-    # Load all files in current directory
-    # Need to extend this for intelligently navigating the database directory
+    # Determine desired parameters and root directory
     parameters = raw_input("For DICOM files, what parameters would you like to put in the database? Options are: SeriesDescription, Rows, Columns, ImageGeometryType ([a] for all) ");
     if (parameters == "a"):
         parameters = ["SeriesDescription", "Rows", "Columns", "ImageGeometryType"];
@@ -83,6 +105,7 @@ def main():
     working_dir = root_dir;
     root_dir_split = root_dir.split("/");
 
+    # Begin parsing through the database
     directories = [x[0] for x in os.walk(root_dir)];
     with open(data_table, "a") as myfile:
         for d in directories:
