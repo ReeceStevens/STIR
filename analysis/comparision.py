@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # Load scan from file
-img = nib.load('/Users/reecestevens/Downloads/output.1.nii')
+img = nib.load('/home/reece/output.nii.gz')
 data = img.get_data()
 # data = cv2.cvtColor(color_data, cv2.COLOR_BGR2GRAY)
 scan_res = data.shape[0]
