@@ -12,6 +12,20 @@ in an automated fashion.
 Currently in development: automatic image segmentation using
 OpenCV. 
 
+Contents
+--------
+./pyscripts - Contains the Python scripts for database maintenance and
+              applying conversions across the entire database.
+
+./bin - Bash script wrappers for the Python scripts. Add to your PATH 
+        environment variable to make execution a lot easier.
+
+./analysis - Working directory for the image segmentation scripts. 
+             Currently in development.
+
+./registration - A template job submission script for Lonestar. Can be 
+                 modified for any job submission.
+
 Dependencies
 ------------
 
