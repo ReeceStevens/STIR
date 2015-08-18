@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # Load scan from file
-img = nib.load('/Users/reecestevens/scans/07001/20020211T131648/EPITHET_STROKE_PROTOCOL_DI/output.nii.gz')
+img = nib.load('/home/reece/output.nii.gz')
 data = img.get_data()
 # data = cv2.cvtColor(color_data, cv2.COLOR_BGR2GRAY)
 scan_res = data.shape[0]

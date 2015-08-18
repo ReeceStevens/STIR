@@ -1,19 +1,29 @@
-# search_database.py
-# 
-# This program is the user interface to the database created
-# by create_database.py. The goal is to programmatically access
-# specific scans by parameters like imaging modality, date, 
-# etc. 
-#
-# In order to have flexibility to fit into other programs, this
-# program will simply run a script that will accept parameters
-# passed as arguments. If no arguments are detected, the user
-# will be prompted to enter search paramters
-#
-# Usage will be: search_database.py <options> [filename/patientID/imaging_type]]
+##################################################################################
+#                           search_database.py                                   #
+# This program is the user interface to the database created                     #
+# by create_database.py. The goal is to programmatically access                  #
+# specific scans by parameters like imaging modality, date,                      #
+# etc.                                                                           #
+#                                                                                #
+# In order to have flexibility to fit into other programs, this                  #
+# program will simply run a script that will accept parameters                   #
+# passed as arguments. If no arguments are detected, the user                    #
+# will be prompted to enter search paramters                                     #
+#                                                                                #
+# Usage will be: search_database.py <options> [filename/patientID/imaging_type]] #
+#                                                                                #
+# Author: Reece Stevens                                                          #
+# Written: December 2014                                                         #
+# Last Updated: 6/15/2015                                                        #
+##################################################################################
 import sys
 import csv
 
+
+###############################################################################
+# search() - parses the database pointed to by path_to_database  with respect #
+#            to variable argtype for search_term.                             #
+###############################################################################
 def search(argtype, search_term, path_to_database):
     i = 0;
     if (argtype == 'id'):
@@ -42,6 +52,10 @@ def search(argtype, search_term, path_to_database):
         #raise InvalidSearchArgs('Improper parameters were passed to the search function.');
         return -1;
 
+###############################################################################
+# searchByID() - Recurse through database and find any IDs that match         #
+#                argument. Return the paths of all matching entries.          #
+###############################################################################
 def searchByID(argument, db_path):
     matches = [];
     paths = [];
@@ -56,6 +70,11 @@ def searchByID(argument, db_path):
     return paths;
 
 
+###############################################################################
+# searchByModality() - Recurse through database and find any modalities that  #
+#                      match argument. Return the paths of all matching       #
+#                      entries.                                               #
+###############################################################################
 def searchByModality(argument, db_path):
     matches = [];
     paths = [];
@@ -74,6 +93,10 @@ def searchByModality(argument, db_path):
             return;
     return paths;
 
+###########################################################################
+# listTypes() - displays a complete list of all scanning modalities in    #
+#               the database.                                             #
+###########################################################################
 def listTypes(db_path):
     types = [];
     with open(db_path, 'rb') as csvfile:
@@ -89,7 +112,9 @@ def listTypes(db_path):
                      types.append(row[6].strip());
     return types;
 
-
+###########################################################
+# getPath() - return the paths of all entries in matches. #
+###########################################################
 def getPath(matches):
     paths = [];
     if (len(matches) == 0):
@@ -108,6 +133,7 @@ def getPath(matches):
             paths.append(temp_path);
     return paths;
 
+# Function handle to allow command line passing of arguments
 if __name__ == '__main__':
     # If this script is called, run main
     try: 
