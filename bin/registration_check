@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# registration_check
+# A bash script to apply a python preview to each registered scan. 
+# Correct scans will be passed over, poor scans will be recorded.
+
+OUTPUTFILE=/Users/reecestevens/STIR/registration_check_files.txt
+echo "Failed Registration Files" > $OUTPUTFILE
+
+SCANDB=/Users/reecestevens/scans
+cd $SCANDB
+SCANS=/Users/reecestevens/scans/*
+for f in $SCANS
+    do
+        if [ $f == $SCANDB/*.csv ]
+            then
+                continue
+        fi
+        echo "Processing $f"
+        # Found a patient directory, checking scans...
+        PATIENTSCANS=$(find $f -type f)
+        cd $f
+        for j in $PATIENTSCANS
+        do
+                echo "Scan $j"
+                (Fslview $j > /dev/null 2>&1) &
+                while true; do
+                    read -p "Is scan registered correctly? [y/n] " -e response
+                    if [ $response == "n" ]
+                        then
+                            echo "$j" >> $OUTPUTFILE
+                            break
+                    elif [ $response == "y" ]
+                        then
+                            break
+                    else
+                            echo "Please enter y or n.\n"
+                            read -p "Is scan registered correctly? [y/n] " -e response
+                    fi
+                done
+                pkill fsl > /dev/null 2>&1
+                cd ..
+        done
+        cd $SCANDB
+    done
+
