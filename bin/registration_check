@@ -25,7 +25,7 @@ for f in $SCANS
                 echo "Scan $j"
                 (Fslview $j > /dev/null 2>&1) &
                 while true; do
-                    read -p "Is scan registered correctly? [y/n] " -e response
+                    read -p "Is scan registered correctly? [y/n/r] " -e response
                     if [ $response == "n" ]
                         then
                             echo "$j" >> $OUTPUTFILE
@@ -33,6 +33,10 @@ for f in $SCANS
                     elif [ $response == "y" ]
                         then
                             break
+                    elif [ $response == "r" ]
+                        then 
+                            echo "Reloading file..."
+                            (Fslview $j > /dev/null 2>&1) &
                     else
                             echo "Please enter y or n.\n"
                             read -p "Is scan registered correctly? [y/n] " -e response
