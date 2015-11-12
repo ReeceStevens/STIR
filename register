@@ -9,4 +9,4 @@
 #$ -q normal
 #$ -pe 12way 12
 
-/home1/03187/rstevens/STIR/bin/db_reg /work/03187/rstevens/bet_output_db /work/03187/rstevens/reg_output
+/home1/03187/rstevens/STIR/bin/db_reg /work/03187/rstevens/nifti_output_db /work/03187/rstevens/reg_output_no_skull_extract
