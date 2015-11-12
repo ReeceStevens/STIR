@@ -5,10 +5,11 @@ if [ $# -gt 3 ]; then
     echo "Invalid number of arguments."
     echo "Usage: searchdb <id/modality/list> <search term> </path/to/database.csv>"
 else
+    STIRDB=/home/03187/rstevens/STIR
     DEFAULT_PYTHON=`python --version`
     if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
-        python2 ../pyscripts/search_database.py $@
+        python2 $STIRDB/pyscripts/search_database.py $@
     else
-        python ../pyscripts/search_database.py $@
+        python $STIRDB/pyscripts/search_database.py $@
     fi
 fi

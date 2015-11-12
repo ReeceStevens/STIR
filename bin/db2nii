@@ -5,10 +5,11 @@ if [ $# -gt 2 ]; then
     echo "Invalid number of arguments."
     echo "Usage: db2nii <source_dir> <output_dir>"
 else
+    STIRDB=/home/03187/rstevens/STIR
     DEFAULT_PYTHON=`python --version`
     if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
-        python /home1/03187/rstevens/STIR/pyscripts/make_nifti_database.py $@
+        python $STIRDB/pyscripts/make_nifti_database.py $@
     else
-        python /home1/03187/rstevens/STIR/pyscripts/make_nifti_database.py $@
+        python $STIRDB/pyscripts/make_nifti_database.py $@
     fi
 fi
