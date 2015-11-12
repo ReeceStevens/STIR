@@ -4,9 +4,11 @@ if [ $# -gt 2 ]; then
     echo $#
     echo "Invalid number of arguments."
     echo "Usage: createdb <name_of_output.csv> </path/to/database>"
-DEFAULT_PYTHON=`python --version`
-if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
-    python2 ../pyscripts/create_database.py $@
 else
-    python ../pyscripts/create_database.py $@
-fi
+    STIRDB=/home/03187/rstevens/STIR
+    DEFAULT_PYTHON=`python --version`
+    if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
+        python2 $STIRDB/pyscripts/create_database.py $@
+    else
+        python $STIRDB/pyscripts/create_database.py $@
+    fi
