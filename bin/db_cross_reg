@@ -3,13 +3,13 @@
 if [ $# -gt 2 ]; then
     echo $#
     echo "Invalid number of arguments."
-    echo "Usage: db2bet <source_dir> <output_dir>"
+    echo "Usage: db2nii <source_dir> <output_dir>"
 else
     STIRDB=/home1/03187/rstevens/STIR
     DEFAULT_PYTHON=`python --version`
     if [[ $DEFAULT_PYTHON != Python\ 2* ]]; then
-        python $STIRDB/pyscripts/make_bet_database.py $@
+        python $STIRDB/pyscripts/reg_t2_intradatabase.py $@
     else
-        python $STIRDB/pyscripts/make_bet_database.py $@
+        python $STIRDB/pyscripts/reg_t2_intradatabase.py $@
     fi
 fi

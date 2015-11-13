@@ -31,7 +31,7 @@ def main(root_db_dir, output_db_dir):
 
     # By manual inspection, we chose a high-resolution EPITHET 3D image to be the reference
     # for the rest of the database.
-    ref_img = root_db_dir+"~/tacc/tools/test_data/07001/20020211T131648/EPITHET_STROKE_PROTOCOL_3D/19020211_131648s011a1001.nii.gz";
+    ref_img = root_db_dir+"/07001/20020211T131648/EPITHET_STROKE_PROTOCOL_3D/19020211_131648s011a1001.nii.gz";
 
     # Check if the correct permissions exist to write to the output location
     try:
