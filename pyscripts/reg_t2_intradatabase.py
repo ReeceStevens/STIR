@@ -31,7 +31,7 @@ def main(root_db_dir, output_db_dir):
 
     # By manual inspection, we chose a high-resolution EPITHET 3D image to be the reference
     # for the rest of the database.
-    ref_img = root_db_dir+"/07001/20020211T131648/EPITHET_STROKE_PROTOCOL_3D/19020211_131648s011a1001.nii.gz";
+    ref_img = root_db_dir+"/07001/20020211T131648/EPITHET_STROKE_PROTOCOL_T2/19020211_131648s010a1001.nii.gz";
 
     # Check if the correct permissions exist to write to the output location
     try:
@@ -75,9 +75,11 @@ def main(root_db_dir, output_db_dir):
             if (re.match('AX_PERF.*', split_path[-1])):
                 scans.append(split_path);"""
             # EPITHET-formatted scans
-            if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
+            if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
                 scans.append(split_path);
-            """if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
+            """if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
+                scans.append(split_path);
+            if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
                 scans.append(split_path);
