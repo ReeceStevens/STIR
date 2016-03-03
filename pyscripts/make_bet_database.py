@@ -8,6 +8,7 @@
 # Written: March 2015                                                     #
 # Last Updated: 6/15/2015                                                 #
 ###########################################################################
+
 import dicom
 import sys
 import os
@@ -53,7 +54,7 @@ def main(root_db_dir, output_db_dir):
             else:
                 # Extract the brain from the scan using BET
                 split_name = k.split(".");
-                subprocess.call(["/work/03187/rstevens/fsl/fsl/bin/bet", (root_db_dir + "/" + prefix + k), (output_db_dir + "/" + prefix + split_name[0]), "-m"], stdout=devnull); 
+                subprocess.call(["/work/03187/rstevens/lonestar/fsl/fsl/bin/bet", (root_db_dir + "/" + prefix + k), (output_db_dir + "/" + prefix + split_name[0]), "-R"], stdout=devnull); 
                 print(k + " has been successfully extracted.\n");
 
 # Function handle to allow command line passing of arguments

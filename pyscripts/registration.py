@@ -20,7 +20,7 @@ import subprocess
 import re
 
 # Path for external command
-flirt = "/work/03187/rstevens/fsl/fsl/bin/flirt";
+flirt = "/work/03187/rstevens/lonestar/fsl/fsl/bin/flirt";
 
 def main(root_db_dir, output_db_dir):
     # Convert arguments to strings
@@ -39,6 +39,7 @@ def main(root_db_dir, output_db_dir):
     reference = ["", ""];
     # Walk through each directory and add scans.
     directories = [x[0] for x in os.walk(root_db_dir)];
+    print directories;
     root_split_path = root_db_dir.split("/");
     for path in directories:
         split_path = path.split("/");

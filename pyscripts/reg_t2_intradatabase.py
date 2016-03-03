@@ -20,7 +20,8 @@ import subprocess
 import re
 
 # Path for external command
-flirt = "/work/03187/rstevens/fsl/fsl/bin/flirt";
+# flirt = "/work/03187/rstevens/lonestar/fsl/fsl/bin/flirt";
+reg_aladin = "/work/03187/rstevens/lonestar/nifty_reg/build/bin/reg_aladin";
 
 def main(root_db_dir, output_db_dir):
     # Convert arguments to strings
@@ -126,7 +127,8 @@ def main(root_db_dir, output_db_dir):
                     break;
 
             # Register a diffusion image with the patient's structural
-            subprocess.call([flirt, "-in", inpath, "-ref", ref_img, "-out", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
+            #subprocess.call([flirt, "-in", inpath, "-ref", ref_img, "-out", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
+            subprocess.call([reg_aladin, "-flo", inpath, "-ref", ref_img, "-res", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
             print(inpath + " has been successfully registered to " + ref_img + "\n");
 
 # Function handle to allow command line passing of arguments
