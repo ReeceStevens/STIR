@@ -123,8 +123,8 @@ def main(root_db_dir, output_db_dir):
                 subprocess.call([flirt, "-in", inpath, "-ref", refpath, "-out", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
                 reference = ["", ""];
                 print(inpath + " has been successfully registered to " + refpath + "\n");	
-				reference_output = refpath.split("/");
-				subprocess.call(["cp", refpath, output_db_dir + "/" + prefix + reference_output[-1]]);
+                reference_output = refpath.split("/");
+                subprocess.call(["cp", refpath, output_db_dir + "/" + prefix + reference_output[-1]]);
 
 # Function handle to allow command line passing of arguments
 if __name__ == '__main__':
