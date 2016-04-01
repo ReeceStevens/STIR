@@ -131,7 +131,7 @@ def main(root_db_dir, output_db_dir):
             #subprocess.call([reg_aladin, "-flo", inpath, "-ref", ref_img, "-res", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
             # WARNING! THIS FEATURE IS EXPERIMENTAL! WILL OVERWRITE ORIGINAL T2 SCAN
             subprocess.call([flirt, "-in", inpath, "-ref", ref_img, "-out", (inpath+".output")], stdout=devnull); 	
-            subprocess.call(["mv", inpath+".output", inpath]);
+            subprocess.call(["mv", inpath+".output.nii.gz", inpath]);
             print(inpath + " has been successfully registered to " + ref_img + "\n");
 
 # Function handle to allow command line passing of arguments
