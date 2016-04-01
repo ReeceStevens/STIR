@@ -80,8 +80,8 @@ def main(root_db_dir, output_db_dir):
                 scans.append(split_path);
             """if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
                 scans.append(split_path); """
-            if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
-                scans.append(split_path);
+            """if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
+                scans.append(split_path); """
             """if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('EPITHET_STROKE_PROTOCOL_SC.*', split_path[-1])):
