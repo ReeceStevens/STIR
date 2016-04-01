@@ -65,8 +65,8 @@ def main(root_db_dir, output_db_dir):
         scans = [];
         try:
             # AX-formatted scans
-            if (re.match('AX_3D_.*', split_path[-1])):
-                scans.append(split_path);
+            """if (re.match('AX_3D_.*', split_path[-1])):
+                scans.append(split_path); """
             """if (re.match('AX_DIFF_.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('AX_EPI_.*', split_path[-1])):
@@ -79,10 +79,10 @@ def main(root_db_dir, output_db_dir):
             if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
                 scans.append(split_path);
             """if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
-                scans.append(split_path);
+                scans.append(split_path); """
             if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
                 scans.append(split_path);
-            if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
+            """if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('EPITHET_STROKE_PROTOCOL_SC.*', split_path[-1])):
                 scans.append(split_path);

@@ -50,9 +50,9 @@ def main(root_db_dir, output_db_dir):
         # Select the directories that we know work right now.
         # This means the directories using the AX_* or EPITHET_* formats.
         try:
-            if (re.match('AX_3D_.*', split_path[-1])):
-                reference = split_path;     
-            if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
+            """if (re.match('AX_3D_.*', split_path[-1])):
+                reference = split_path;      """
+            if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
                 reference = split_path;     
         except IndexError:
             # No known reference image found. Skipping path.
@@ -60,25 +60,25 @@ def main(root_db_dir, output_db_dir):
         scans = [];
         try:
             # AX-formatted scans
-            if (re.match('AX_DIFF_.*', split_path[-1])):
+            """if (re.match('AX_DIFF_.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('AX_EPI_.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('AX_FLAIR_.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('AX_PERF.*', split_path[-1])):
-                scans.append(split_path);
+                scans.append(split_path); """
             # EPITHET-formatted scans
             if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
                 scans.append(split_path);
-            if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
+            """if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('EPITHET_STROKE_PROTOCOL_SC.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('EPITHET_STROKE_PROTOCOL_T1.*', split_path[-1])):
                 scans.append(split_path);
             if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
-                scans.append(split_path);
+                scans.append(split_path);"""
         # Ignore index errors, they're just empty paths
         except IndexError:
             pass; 
