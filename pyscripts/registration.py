@@ -39,7 +39,7 @@ def main(root_db_dir, output_db_dir):
     reference = ["", ""];
     # Walk through each directory and add scans.
     directories = [x[0] for x in os.walk(root_db_dir)];
-    print directories;
+    #print directories;
     root_split_path = root_db_dir.split("/");
     for path in directories:
         split_path = path.split("/");
@@ -86,6 +86,8 @@ def main(root_db_dir, output_db_dir):
         if (len(scans) < 1):
             continue;
         # Otherwise, go through each file and register
+        print scans;
+        print reference;
         for in_file in scans: 
             # If the reference and input are from the same patient at the same date, we're ready to run FLIRT
             if (reference[-2] == in_file[-2]) and (reference != ["", ""]) and (in_file != ["", ""]): 
