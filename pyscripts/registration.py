@@ -5,12 +5,9 @@
 # scan to a high-definition structural scan. Currently only registers     #
 # a patient to themselves.                                                #
 #                                                                         #
-# TODO: Register all scans to a common standard to facilitate comparision #
-#       between diffusion scans of different patients                     #
-#                                                                         #
 # Author: Reece Stevens                                                   #
 # Written: May 2015                                                       #
-# Last Updated: 6/15/2015                                                 #
+# Last Updated: 4/6/2016                                                  #
 ###########################################################################
 import dicom
 import sys
