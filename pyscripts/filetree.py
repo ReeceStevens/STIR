@@ -16,11 +16,10 @@ class FileTreeNode:
         self.level = level
 
     def getScan(self):
-        if (self.level == 3):
-            for k in children:
+            for k in self.children:
                 if ((not(re.match(".*mask.*", k.tag))) and (not(re.match("co.*", k.tag))) and (not(re.match("o.*", k.tag)))):
-                return k;
-        return None;
+                    return k;
+            return None;
 
 
     # Return child node if this node or one of its 
@@ -29,15 +28,16 @@ class FileTreeNode:
         if not self.children:
             return None;
         for node in self.children:
-            if (node.tag == child_tag):
+            if (node.tag == (child_tag)):
                 return node;
             found = node.hasChild(child_tag)
-            return found;
+            if found:
+                return found;
         return None;
 
 class FileTree:
     root = None
-    nodes = {};
+    nodes = {}
     # Create a file tree out of a path
     def __init__(self, directory):
         # Set root folder as the root of the tree
@@ -55,7 +55,7 @@ class FileTree:
             full_path = path[0]
             split_path = full_path.split("/")
             # Remove the root path from the file structure
-            split_path = split_path[len(rootpath)-1:]
+            split_path = split_path[len(rootpath):]
             # If there aren't three directories above, we aren't at the correct folder.
             if (len(split_path) < 3):
                 continue
@@ -63,7 +63,7 @@ class FileTree:
             parent = self.root;
             for i in range(len(split_path)):
                 new_parent = parent.hasChild(split_path[i]);
-                if (new_parent != None):
+                if (new_parent):
                     parent = new_parent;
                     continue;
                 else:
@@ -77,7 +77,8 @@ class FileTree:
     
     def getPatients(self):
         patients = {};
-        for node in nodes:
+		#for node in self.root.children:
+        for tag,node in self.nodes.iteritems():
             if (node.level == 1):
                 patients[node.tag] = node;
         return patients;
@@ -93,7 +94,7 @@ class FileTree:
         modalities = {};
         patient = self.get(patient_tag);
         for date in patient.children:
-            if (date.tag == date_tag):
+            if (date.tag == (date_tag)):
                 for child in date.children:
                     modalities[child.tag] = child;
         return modalities;
@@ -105,9 +106,7 @@ class FileTree:
                 scans[node.tag] = node;
         return scans;
 
-    def sameSession(self, scan_a_tag, scan_b_tag);
-        scanA = self.get(scan_a_tag);
-        scanB = self.get(scan_b_tag);
+    def sameSession(self, scanA, scanB):
         # If the patient and date are the same, these scans are from the same session
         if (scanA.parent.parent.parent == scanB.parent.parent.parent) and (scanA.parent.parent == scanB.parent.parent):
             return True;
@@ -128,7 +127,11 @@ class FileTree:
         parent.children.append(node)
         node.parent = parent
         node.level = parent.level + 1
-        self.nodes[node.tag] = node
+        dbtag = node.tag;
+        while (parent.level > 0):
+            dbtag = parent.tag + "/" + dbtag;
+            parent = parent.parent; 
+        self.nodes[dbtag] = node
     
     def get(self, tag):
         return self.nodes[tag];
