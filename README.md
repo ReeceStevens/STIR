@@ -40,6 +40,36 @@ absolute path to each command is specified in the python code. Replace
 this with the absolute path for your system (output of the command
 `which <command>`).
 
+Programs
+--------
+
+- `createdb <name_of_output.csv> </path/to/database>`
+	- Creates a CSV file with all scans in the database
+	- Assumes a file structure of `patient/date/scan_modality/scanfile.dcm`
+
+- `searchdb <id/modality/list> <search term> </path/to/database.csv>`
+	- Searches for a scan in the generated CSV file by id or modality.
+	- Returns path of all scans that match the search parameters.
+	- Alternate parameter `list` lists all imaging modalities in the database.
+
+- `db2nii <source_dir> <output_dir>`
+	- Given a source database of DICOM and MINC files, creates a new database with scans 
+	converted to NIFTI format.
+	- Most registration software requires that scans be in the NIFTI format.
+	- Assumes a file structure of `patient/date/scan_modality/scanfile.(dcm/mnc)`
+
+- `db_reg <source_dir> <output_dir>`
+	- Given a source database of NIFTI files, register a patient's diffusion scan to their
+	structural T2 scan.
+	- Registration is performed intra-patient only.
+	- Assumes a file structure of `patient/date/scan_modality/scanfile.nii.gz`
+
+- `db_cross_reg`
+	- Given a source database of NIFTI files, register a patient's structural T2 scan to a 
+	reference T2 scan.
+	- Registration is performed inter-patient only.
+	- Assumes a file structure of `patient/date/scan_modality/scanfile.nii.gz`
+
 
 [pydicom]: https://github.com/darcymason/pydicom
 [libmagic]: https://pypi.python.org/pypi/python-magic

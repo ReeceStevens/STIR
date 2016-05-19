@@ -101,7 +101,7 @@ def main(root_dir):
         parameters = ["SeriesDescription", "Rows", "Columns", "ImageGeometryType"];
     else:
         parameters = list(parameters);
-    root_dir = (str) root_dir;
+    root_dir = str(root_dir);
     working_dir = root_dir;
     root_dir_split = root_dir.split("/");
 
