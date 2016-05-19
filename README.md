@@ -23,9 +23,6 @@ Contents
 `analysis` - Working directory for the image segmentation scripts. 
              Currently in development.
 
-`registration` - A template job submission script for Lonestar. Can be 
-                 modified for any job submission.
-
 Dependencies
 ------------
 
