@@ -9,19 +9,16 @@ This combination of scripts is designed to create an organized
 database of scans that can be analyzed, registered, and segmented
 in an automated fashion.
 
-Currently in development: automatic image segmentation using
-OpenCV. 
-
 Contents
 --------
-`pyscripts` - Contains the Python scripts for database maintenance and
+`pyscripts` - Python scripts for database maintenance and
               applying conversions across the entire database.
 
-`bin` - Bash script wrappers for the Python scripts. Add to your PATH 
+`bin` - Bash script wrappers for the registration Python scripts. Add to your PATH 
         environment variable to make execution a lot easier.
 
-`analysis` - Working directory for the image segmentation scripts. 
-             Currently in development.
+`analysis` - Python scripts for image segmentation/analysis as well as 
+			 registration quality scoring. Example files included.
 
 Dependencies
 ------------

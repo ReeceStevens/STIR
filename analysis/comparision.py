@@ -1,12 +1,21 @@
+######################################################
+#                                                    #
+# comparison.py                                      #
+# A script investigating different ischemic boundary #
+# detection strategies. Retained in repository as an #
+# example file and starting point for further openCV #
+# based image analysis.                              #
+#                                                    #
+######################################################
+
 import nibabel as nib
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
 # Load scan from file
-img = nib.load('/home/reece/output.nii.gz')
+img = nib.load('output.nii.gz')
 data = img.get_data()
-# data = cv2.cvtColor(color_data, cv2.COLOR_BGR2GRAY)
 scan_res = data.shape[0]
 num_slices = data.shape[2]
 newdata = np.zeros([num_slices,scan_res,scan_res])
@@ -32,50 +41,15 @@ plt.show()
 newdata_uint8 = np.divide(newdata, newdata.max())
 newdata_uint8 = np.multiply(newdata_uint8, 255)
 newdata_uint8 = np.array(newdata_uint8, dtype=np.uint8)
-""" plt.imshow(newdata_uint8[16], 'gray')
-plt.show()
-plt.imshow(newdata[16], 'gray')
-plt.show() """
+
 i = 1
 max_thresh = newdata.max()
 for image in newdata_uint8:
-    #image = cv2.GaussianBlur(image, (5,5),0)
-    # image = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 5, 0)
-    # ret, image = cv2.threshold(image, 0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    #ret, image = cv2.threshold(image,115,255,cv2.THRESH_BINARY)
-
-    # Calculate average intensity for the image slice
-    """ k = 0
-    average = 0
-    for x in image:
-        for y in x:
-            # Ignore low intensity areas (background, CSF)
-            if (y <= 30):
-                continue
-            k = k + 1
-            average = average + y
-    if (k != 0):
-        average = average / k
-    else:
-        average = 0
-
-    # Threshold determined by values that are two standard deviations away from the adjusted mean
-    std_image = np.std(image)
-    thresh = average + std_image*2
-    orig_image = image """
-
-    # contours, hierarchy = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    # cv2.drawContours(orig_image, contours, len(contours)-1, (0,255,0), 2)
-    # ret, image = cv2.threshold(image,thresh,255,cv2.THRESH_BINARY)
-    # orig_image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2GRAY)
-    # combined = cv2.addWeighted(orig_image, 0.5, image, 0.5, 0.0)
-
     # Image manipulation on slice 18
     left = np.zeros((len(image)/2, len(image[1])))
     for k in range (0,len(image)/2):
         left[k] = image[k]
     left = cv2.blur(left,(5,5))
-    # plt.imshow(left)
 
     right = np.zeros((len(image)/2, len(image[1])))
     for k in range (0,len(image)/2 - 1):
@@ -83,7 +57,6 @@ for image in newdata_uint8:
     # flip around x axis
     right = cv2.flip(right, 0)
     right = cv2.blur(right,(5,5))
-    # plt.imshow(right)
 
     difference = np.subtract(left, right)
 

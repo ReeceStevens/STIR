@@ -1,16 +1,12 @@
 ###########################################################################
 #                       reg_t2_intradatabase.py                           #
-# Python script for performing registration on each file in the output    #
-# of the make_bet_database.py script. Registers every diffusion-based     #
-# scan to a high-definition structural scan. Currently only registers     #
-# a patient to themselves.                                                #
-#                                                                         #
-# TODO: Register all scans to a common standard to facilitate comparision #
-#       between diffusion scans of different patients                     #
+# Register the T2 structural scans of each patient to a reference scan    #
+# (in this case, the T2 scan of patient 07001). Quality of registration   #
+# can be checked by the python packages in the analysis directory.        #
 #                                                                         #
 # Author: Reece Stevens                                                   #
-# Written: November 2015                                                       #
-# Last Updated: 11/12/2015                                                 #
+# Written: November 2015                                                  #
+# Last Updated: 05/19/2016                                                #
 ###########################################################################
 import dicom
 import sys
@@ -20,7 +16,6 @@ import subprocess
 import re
 
 # Path for external command
-flirt = "/work/03187/rstevens/lonestar/fsl/fsl/bin/flirt";
 reg_aladin = "/work/03187/rstevens/lonestar/nifty_reg/build/bin/reg_aladin";
 
 def main(root_db_dir, output_db_dir):
@@ -30,8 +25,6 @@ def main(root_db_dir, output_db_dir):
     # Open /dev/null for tossing stdout
     devnull = open('/dev/null', 'w');
 
-    # By manual inspection, we chose a high-resolution EPITHET 3D image to be the reference
-    # for the rest of the database.
     ref_img = root_db_dir+"/07001/20020211T131648/EPITHET_STROKE_PROTOCOL_T2/19020211_131648s010a1001.nii.gz";
 
     # Check if the correct permissions exist to write to the output location
@@ -52,52 +45,19 @@ def main(root_db_dir, output_db_dir):
        
         # Select the directories that we know work right now.
         # This means the directories using the AX_* or EPITHET_* formats.
-        """
-        try:
-            if (re.match('AX_3D_.*', split_path[-1])):
-                reference = split_path;     
-            if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
-                reference = split_path;     
-        except IndexError:
-            # No known reference image found. Skipping path.
-            continue;
-        """
         scans = [];
         try:
-            # AX-formatted scans
-            """if (re.match('AX_3D_.*', split_path[-1])):
-                scans.append(split_path); """
-            """if (re.match('AX_DIFF_.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('AX_EPI_.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('AX_FLAIR_.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('AX_PERF.*', split_path[-1])):
-                scans.append(split_path);"""
             # EPITHET-formatted scans
             if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
                 scans.append(split_path);
-            """if (re.match('EPITHET_STROKE_PROTOCOL_3D.*', split_path[-1])):
-                scans.append(split_path); """
-            """if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
-                scans.append(split_path); """
-            """if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('EPITHET_STROKE_PROTOCOL_SC.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('EPITHET_STROKE_PROTOCOL_T1.*', split_path[-1])):
-                scans.append(split_path);"""
         # Ignore index errors, they're just empty paths
         except IndexError:
             pass; 
-        # If no diffusion scans were found, skip (nothing to register)
+        # If no scans were found, skip (nothing to register)
         if (len(scans) < 1):
             continue;
         # Otherwise, go through each file and register
         for in_file in scans: 
-            """# If the reference and input are from the same patient at the same date, we're ready to run FLIRT
-            if (reference[-2] == in_file[-2]) and (reference != ["", ""]) and (in_file != ["", ""]): """
             prefix = "";
             # Build an identical file structure in the output directory
             for folder in split_path:
@@ -112,26 +72,15 @@ def main(root_db_dir, output_db_dir):
             # Prepare file paths for reference and input files
             inpath = "/".join(in_file);
             inpath = root_db_dir + "/" + inpath;
-            """
-            for k in dir_files_ref:
-                # Use regex to make sure we're matching the correct file, not a byproduct of BET
-                if ((not(re.match(".*mask.*", k))) and (not(re.match("co.*", k))) and (not(re.match("o.*", k)))):
-                    refpath = "/".join([refpath, k]); 
-                    break;
-            """
             dir_files_in = [f for f in os.listdir(inpath) if os.path.isfile(os.path.join(inpath, f))];
             for k in dir_files_in:
-                # Use regex to make sure we're matching the correct file, not a byproduct of BET
+                # Use regex to make sure we're matching the correct file, not a mask or byproduct of other scan conversions
                 if ((not(re.match(".*mask.*", k))) and (not(re.match("co.*", k))) and (not(re.match("o.*", k)))):
                     inpath = "/".join([inpath, k]); 
                     break;
-
-            # Register a diffusion image with the patient's structural
-            #subprocess.call([flirt, "-in", inpath, "-ref", ref_img, "-out", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
+            # Register the patient's T2 scan to the reference T2
             subprocess.call([reg_aladin, "-flo", inpath, "-ref", ref_img, "-res", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz"),"-omp", "8"], stdout=devnull); 	
-            # WARNING! THIS FEATURE IS EXPERIMENTAL! WILL OVERWRITE ORIGINAL T2 SCAN
-            #subprocess.call([flirt, "-in", inpath, "-ref", ref_img, "-out", (inpath+".output")], stdout=devnull); 	
-            subprocess.call(["mv", inpath+".output.nii.gz", inpath]);
+            subprocess.call(["mv", inpath+".output.nii.gz", inpath+".output.nii.gz"]);
             print(inpath + " has been successfully registered to " + ref_img + "\n");
 
 # Function handle to allow command line passing of arguments

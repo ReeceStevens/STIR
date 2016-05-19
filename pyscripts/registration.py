@@ -17,7 +17,7 @@ import subprocess
 import re
 
 # Path for external command
-flirt = "/work/03187/rstevens/lonestar/fsl/fsl/bin/flirt";
+reg_aladin = "/work/03187/rstevens/lonestar/nifty_reg/build/bin/reg_aladin";
 
 def main(root_db_dir, output_db_dir):
     # Convert arguments to strings
@@ -32,11 +32,11 @@ def main(root_db_dir, output_db_dir):
         if not os.path.isdir(output_db_dir):
             print ("Unable to create new root directory of database. Are you sure you have permissions and file space?\n");
             return;
+
     # Generate empty variable for the reference scan
     reference = ["", ""];
     # Walk through each directory and add scans.
     directories = [x[0] for x in os.walk(root_db_dir)];
-    #print directories;
     root_split_path = root_db_dir.split("/");
     for path in directories:
         split_path = path.split("/");
@@ -44,11 +44,7 @@ def main(root_db_dir, output_db_dir):
         for x in range (len(root_split_path)):
             split_path.pop(0);
        
-        # Select the directories that we know work right now.
-        # This means the directories using the AX_* or EPITHET_* formats.
         try:
-            """if (re.match('AX_3D_.*', split_path[-1])):
-                reference = split_path;      """
             if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
                 reference = split_path;     
         except IndexError:
@@ -56,37 +52,20 @@ def main(root_db_dir, output_db_dir):
             continue;
         scans = [];
         try:
-            # AX-formatted scans
-            """if (re.match('AX_DIFF_.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('AX_EPI_.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('AX_FLAIR_.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('AX_PERF.*', split_path[-1])):
-                scans.append(split_path); """
             # EPITHET-formatted scans
             if (re.match('EPITHET_STROKE_PROTOCOL_DI.*', split_path[-1])):
                 scans.append(split_path);
-            """if (re.match('EPITHET_STROKE_PROTOCOL_PE.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('EPITHET_STROKE_PROTOCOL_SC.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('EPITHET_STROKE_PROTOCOL_T1.*', split_path[-1])):
-                scans.append(split_path);
-            if (re.match('EPITHET_STROKE_PROTOCOL_T2.*', split_path[-1])):
-                scans.append(split_path);"""
         # Ignore index errors, they're just empty paths
         except IndexError:
             pass; 
-        # If no diffusion scans were found, skip (nothing to register)
+        # If no scans were found, skip (nothing to register)
         if (len(scans) < 1):
             continue;
         # Otherwise, go through each file and register
         print scans;
         print reference;
         for in_file in scans: 
-            # If the reference and input are from the same patient at the same date, we're ready to run FLIRT
+            # If the reference and input are from the same patient at the same date, we're ready to register
             if (reference[-2] == in_file[-2]) and (reference != ["", ""]) and (in_file != ["", ""]): 
                 prefix = "";
                 # Build an identical file structure in the output directory
@@ -119,7 +98,7 @@ def main(root_db_dir, output_db_dir):
                         break;
 
                 # Register a diffusion image with the patient's structural
-                subprocess.call([flirt, "-in", inpath, "-ref", refpath, "-out", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
+                subprocess.call([reg_aladin, "-flo", inpath, "-ref", refpath, "-res", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz")], stdout=devnull); 	
                 reference = ["", ""];
                 print(inpath + " has been successfully registered to " + refpath + "\n");	
                 reference_output = refpath.split("/");

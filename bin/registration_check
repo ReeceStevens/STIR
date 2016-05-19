@@ -4,6 +4,9 @@
 # A bash script to apply a python preview to each registered scan. 
 # Correct scans will be passed over, poor scans will be recorded.
 
+# Requires that Fslview be installed and in PATH. For development 
+# purposes only.
+
 OUTPUTFILE=/Users/reecestevens/STIR/registration_check_files.txt
 echo "Failed Registration Files" > $OUTPUTFILE
 

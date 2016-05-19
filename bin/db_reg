@@ -3,7 +3,7 @@
 if [ $# -gt 2 ]; then
     echo $#
     echo "Invalid number of arguments."
-    echo "Usage: db2nii <source_dir> <output_dir>"
+    echo "Usage: db_reg <source_dir> <output_dir>"
 else
     STIRDB=/home1/03187/rstevens/STIR
     DEFAULT_PYTHON=`python --version`
