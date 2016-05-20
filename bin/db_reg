@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ $# -ne 2 ]; then
+if [ $# -ne 2 ] && [ $# -ne 3 ]; then
     echo "Invalid number of arguments."
-    echo "Usage: db_reg <source_dir> <output_dir>"
+	echo "Usage: db_reg <source_dir> <output_dir> <optional: # of cores (default 8)>"
 else
 	if [ -z ${STIRDB+x} ]; then 
 		echo "STIRDB environment variable is unset. Please set STIRDB to the location of the STIR directory."

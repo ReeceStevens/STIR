@@ -18,7 +18,7 @@ import re
 # Path for external command
 reg_aladin = "/work/03187/rstevens/lonestar/nifty_reg/build/bin/reg_aladin";
 
-def main(root_db_dir, output_db_dir):
+def main(root_db_dir, output_db_dir, num_cores=8):
     # Convert arguments to strings
     root_db_dir = str(root_db_dir);
     output_db_dir = str(output_db_dir);
@@ -79,13 +79,16 @@ def main(root_db_dir, output_db_dir):
                     inpath = "/".join([inpath, k]); 
                     break;
             # Register the patient's T2 scan to the reference T2
-            subprocess.call([reg_aladin, "-flo", inpath, "-ref", ref_img, "-res", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz"),"-omp", "8"], stdout=devnull); 	
+            subprocess.call([reg_aladin, "-flo", inpath, "-ref", ref_img, "-res", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz"),"-omp", str(num_cores)], stdout=devnull); 	
             subprocess.call(["mv", inpath+".output.nii.gz", inpath+".output.nii.gz"]);
             print(inpath + " has been successfully registered to " + ref_img + "\n");
 
 # Function handle to allow command line passing of arguments
 if __name__ == '__main__':
-    try:
-        main(sys.argv[1], sys.argv[2]);
-    except IndexError:
-        print("Not enough arguments.\nUsage: db_reg <source_dir> <output_dir>\n");
+    if (sys.argv[3] is not None):
+        main(sys.argv[1], sys.argv[2], sys.argv[3]);
+    else:
+        try:
+            main(sys.argv[1], sys.argv[2]);
+        except IndexError:
+            print("Not enough arguments.\nUsage: db_reg <source_dir> <output_dir>\n");
