@@ -70,6 +70,14 @@ Programs
 	- Registration is performed inter-patient only.
 	- Assumes a file structure of `patient/date/scan_modality/scanfile.nii.gz`
 
+Lonestar 5 Notes
+----------------
+When running on Lonestar 5, some dependencies are pre-installed. Add these programs to your path:
+
+- `mri_convert`: `/corral-repl/utexas/poldracklab/software_lonestar/freesurfer/bin/mri_convert`
+- `dcm2nii`: `/corral-repl/utexas/poldracklab/software_lonestar/local/bin/dcm2nii`
+- `reg_aladin` (from the nifti_reg package): `/work/03187/rstevens/lonestar/tools/nifti_reg_install/bin/reg_aladin`
+
 
 [pydicom]: https://github.com/darcymason/pydicom
 [libmagic]: https://pypi.python.org/pypi/python-magic
