@@ -58,13 +58,13 @@ Programs
 	- Most registration software requires that scans be in the NIFTI format.
 	- Assumes a file structure of `patient/date/scan_modality/scanfile.(dcm/mnc)`
 
-- `db_reg <source_dir> <output_dir>`
+- `db_reg <source_dir> <output_dir> <optional: # of cores (default 8)>`
 	- Given a source database of NIFTI files, register a patient's diffusion scan to their
 	structural T2 scan.
 	- Registration is performed intra-patient only.
 	- Assumes a file structure of `patient/date/scan_modality/scanfile.nii.gz`
 
-- `db_cross_reg`
+- `db_cross_reg <source_dir> <output_dir> <optional: # of cores (default 8)>`
 	- Given a source database of NIFTI files, register a patient's structural T2 scan to a 
 	reference T2 scan.
 	- Registration is performed inter-patient only.
@@ -77,8 +77,6 @@ When running on Lonestar 5, some dependencies are pre-installed. Add these progr
 - `mri_convert`: `/corral-repl/utexas/poldracklab/software_lonestar/freesurfer/bin/mri_convert`
 - `dcm2nii`: `/corral-repl/utexas/poldracklab/software_lonestar/local/bin/dcm2nii`
 - `reg_aladin` (from the nifti_reg package): `/work/03187/rstevens/lonestar/tools/nifti_reg_install/bin/reg_aladin`
-
-
 [pydicom]: https://github.com/darcymason/pydicom
 [libmagic]: https://pypi.python.org/pypi/python-magic
 [opencv]: http://opencv.org/
