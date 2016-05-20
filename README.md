@@ -76,7 +76,7 @@ When running on Lonestar 5, some dependencies are pre-installed. Add these progr
 
 - `mri_convert`: `/corral-repl/utexas/poldracklab/software_lonestar/freesurfer/bin/mri_convert`
 - `dcm2nii`: `/corral-repl/utexas/poldracklab/software_lonestar/local/bin/dcm2nii`
-- `reg_aladin` (from the nifti_reg package): `/work/03187/rstevens/lonestar/tools/nifti_reg_install/bin/reg_aladin`
+- `reg_aladin` (from the nifti_reg package): `/corral-repl/tacc/bio/STIR-data/rstevens/nifti_reg/bin`
 [pydicom]: https://github.com/darcymason/pydicom
 [libmagic]: https://pypi.python.org/pypi/python-magic
 [opencv]: http://opencv.org/
