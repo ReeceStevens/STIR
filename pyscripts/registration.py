@@ -9,7 +9,6 @@
 # Written: May 2015                                                       #
 # Last Updated: 4/6/2016                                                  #
 ###########################################################################
-import dicom
 import sys
 import os
 import magic
@@ -100,6 +99,7 @@ def main(root_db_dir, output_db_dir, num_cores=8):
                 # Register a diffusion image with the patient's structural
                 subprocess.call([reg_aladin, "-flo", inpath, "-ref", refpath, "-res", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz"), "-omp", str(num_cores)], stdout=devnull); 	
                 reference = ["", ""];
+                subprocess.call(["mv", (output_db_dir + "/" + prefix + in_file[-1] + ".output.nii.gz"), "inpath"]);
                 print(inpath + " has been successfully registered to " + refpath + "\n");	
                 reference_output = refpath.split("/");
                 subprocess.call(["cp", refpath, output_db_dir + "/" + prefix + reference_output[-1]]);

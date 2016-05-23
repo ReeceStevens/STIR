@@ -8,7 +8,7 @@
 # Written: February 2015                                                  #
 # Last Updated: 6/15/2015                                                 #
 ###########################################################################
-import dicom
+import pydicom as dicom
 import sys
 import os
 import magic

@@ -1,0 +1,27 @@
+#!/bin/bash
+export STIRDB=..
+STIR_PATH=../bin
+SCAN_PATH=../examples/scans
+NIFTI_DB_PATH=../examples/nifti
+REGISTRATION_SCRATCH_PATH=../examples/registration
+REF_SCANS=../examples/reference_scans
+REF_IMG=${REF_SCANS}/reference_T2.nii.gz
+CORES=8
+
+# Create CSV database
+${STIR_PATH}/createdb output.csv ${SCAN_PATH}
+
+# Example database search
+${STIR_PATH}/searchdb modality T2 output.csv
+
+# Convert DICOM/MINC database to NIFTI
+${STIR_PATH}/db2nii ${SCAN_PATH} ${NIFTI_DB_PATH}
+
+# Register inter-patient reference scans together
+${STIR_PATH}/db_cross_reg ${NIFTI_DB_PATH} ${REGISTRATION_SCRATCH_PATH} ${REF_IMG} ${CORES}
+
+# Register intra-patient scans to their reference
+${STIR_PATH}/db_reg ${NIFTI_DB_PATH} ${REGISTRATION_SCRATCH_PATH} ${CORES}
+
+# Evaluate the quality of a registration by comparing original and registered scans.
+python ../analysis/vis.py ${REF_SCANS}/original_DI.nii.gz ${REF_SCANS}/reference_T2.nii.gz ${REF_SCANS}/output.nii.gz

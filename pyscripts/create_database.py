@@ -8,7 +8,8 @@
 # Last Updated: 6/15/2015                                                 #
 ###########################################################################
 
-import dicom
+import pydicom
+import sys
 import os
 import magic
 import re
@@ -64,7 +65,7 @@ def dirFileRead(path, parameters):
         # Detect DICOM files
         if (magic.from_file(path + "/" + k) == 'DICOM medical imaging data'):
            dicom_files.append(path + "/" + k);
-           dm = dicom.read_file(dicom_files[0]); # extract file information
+           dm = pydicom.read_file(dicom_files[0]); # extract file information
 
            # Extract each desired parameter and insert it into the output list.
            for x in parameters:

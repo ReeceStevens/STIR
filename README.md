@@ -63,12 +63,14 @@ Programs
 	structural T2 scan.
 	- Registration is performed intra-patient only.
 	- Assumes a file structure of `patient/date/scan_modality/scanfile.nii.gz`
+	- ***Warning: this code, by default, overwrites the original input scan with the registered scan. Make a copy of your database before running this program.***
 
-- `db_cross_reg <source_dir> <output_dir> <optional: # of cores (default 8)>`
+- `db_cross_reg <source_dir> <output_dir> <reference_T2_path> <optional: # of cores (default 8)>`
 	- Given a source database of NIFTI files, register a patient's structural T2 scan to a 
 	reference T2 scan.
 	- Registration is performed inter-patient only.
 	- Assumes a file structure of `patient/date/scan_modality/scanfile.nii.gz`
+	- ***Warning: this code, by default, overwrites the original input scan with the registered scan. Make a copy of your database before running this program.***
 
 Lonestar 5 Notes
 ----------------
