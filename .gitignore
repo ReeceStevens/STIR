@@ -8,9 +8,5 @@
 *.swp
 .*
 
-# Ignore scan files
-*.nii.gz
-*.nii
-
 # For now, ignore Matlab files
 *.m
