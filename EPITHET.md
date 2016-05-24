@@ -10,6 +10,7 @@ files with the AX naming convention did not register properly either, possibly d
 metadata corruption during NIFTI conversion. This requires more investigation. 
 
 The current workflow for analyzing the EPITHET database is as follows:
+
 1. Create the *.csv database record
 2. Register each patient's properly-formatted T2 scan to a master T2 scan
 3. Registering each patient's DI scan to their previously-registered T2
