@@ -10,3 +10,7 @@
 
 # For now, ignore Matlab files
 *.m
+
+# Ignore outputs in the examples directory
+examples/nifti*
+examples/registration*
