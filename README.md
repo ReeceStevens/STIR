@@ -20,6 +20,9 @@ Contents
 `analysis` - Python scripts for image segmentation/analysis as well as 
 			 registration quality scoring. Example files included.
 
+`examples` - Example Bash scripts that demonstrate the usage of these software tools
+			 on an example database. 
+
 Dependencies
 ------------
 
