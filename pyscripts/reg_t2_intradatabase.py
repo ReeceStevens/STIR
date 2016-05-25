@@ -82,12 +82,13 @@ def main(root_db_dir, output_db_dir, ref_path="/corral-repl/tacc/bio/STIR-data/r
 
 # Function handle to allow command line passing of arguments
 if __name__ == '__main__':
-    if (sys.argv[4] is not None):
+    try:
         main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]) 
-    elif (sys.argv[3] is not None):
-        main(sys.argv[1], sys.argv[2], sys.argv[3]) 
-    else:
+    except IndexError:
         try:
-            main(sys.argv[1], sys.argv[2]) 
+            main(sys.argv[1], sys.argv[2], sys.argv[3]) 
         except IndexError:
-            print("Not enough arguments.\nUsage: db_reg <source_dir> <output_dir> <reference path> <optional: number of cores>\n") 
+            try:
+                main(sys.argv[1], sys.argv[2]) 
+            except IndexError:
+                print("Not enough arguments.\nUsage: db_reg <source_dir> <output_dir> <reference path> <optional: number of cores>\n") 
